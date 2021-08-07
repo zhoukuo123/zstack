@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<globalConfig xmlns="http://zstack.org/schema/zstack">
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVmInstanceMsgMaxFlowRate</name>
+        <description>apiCreateVmInstanceMsg MaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVmInstanceMsgAvgFlowRate</name>
+        <description>apiCreateVmInstanceMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiStopVmInstanceMsgMaxFlowRate</name>
+        <description>apiStopVmInstanceMsg MaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiStopVmInstanceMsgAvgFlowRate</name>
+        <description>apiStopVmInstanceMsg AvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+</globalConfig>
