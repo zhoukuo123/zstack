@@ -118,7 +118,7 @@ test a VM's start/stop/reboot/destroy/recover operations
 
     @Override
     void clean() {
-        env.delete();
+//        env.delete()
     }
 
 }

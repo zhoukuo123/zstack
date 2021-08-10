@@ -1,7 +1,9 @@
 package org.zstack.core.ratelimit;
 
 import com.google.common.base.Preconditions;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.zstack.core.db.DatabaseFacade;
 import org.zstack.core.db.SQL;
 
@@ -10,7 +12,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+@Configurable(preConstruction = true, autowire = Autowire.BY_TYPE)
 public class TokenBucket {
+
     @Autowired
     private DatabaseFacade dbf;
 
@@ -78,6 +82,7 @@ public class TokenBucket {
     }
 
     public void start() {
+
         if (maxFlowRate != 0) {
             APIRateLimitVO apirl = new APIRateLimitVO();
             apirl.setApi(apiName);
