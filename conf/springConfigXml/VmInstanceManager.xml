@@ -154,13 +154,6 @@
         </zstack:plugin>
     </bean>
 
-    <bean id="VmInstanceRateLimitInterceptor" class="org.zstack.compute.vm.VmInstanceRateLimitInterceptor">
-        <zstack:plugin>
-            <zstack:extension interface="org.zstack.header.Component" />
-            <zstack:extension interface="org.zstack.header.apimediator.ApiMessageInterceptor" />
-        </zstack:plugin>
-    </bean>
-
     <bean id="VmCascadeExtension" class="org.zstack.compute.vm.VmCascadeExtension">
         <zstack:plugin>
 			<zstack:extension interface="org.zstack.core.cascade.CascadeExtensionPoint" />

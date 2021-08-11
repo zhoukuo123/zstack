@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <globalConfig xmlns="http://zstack.org/schema/zstack">
+<!--    vmInstance api-->
     <config>
         <category>ratelimit</category>
         <name>apiCreateVmInstanceMsgMaxFlowRate</name>
@@ -1135,4 +1136,278 @@
         <defaultValue>10</defaultValue>
         <type>java.lang.Integer</type>
     </config>
+<!--    volume api-->
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeMsgMaxFlowRate</name>
+        <description>apiCreateDataVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeMsgAvgFlowRate</name>
+        <description>apiCreateDataVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiDeleteDataVolumeMsgMaxFlowRate</name>
+        <description>apiDeleteDataVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiDeleteDataVolumeMsgAvgFlowRate</name>
+        <description>apiDeleteDataVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiQueryVolumeMsgMaxFlowRate</name>
+        <description>apiQueryVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiQueryVolumeMsgAvgFlowRate</name>
+        <description>apiQueryVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiChangeVolumeStateMsgMaxFlowRate</name>
+        <description>apiChangeVolumeStateMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiChangeVolumeStateMsgAvgFlowRate</name>
+        <description>apiChangeVolumeStateMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVolumeSnapshotMsgMaxFlowRate</name>
+        <description>apiCreateVolumeSnapshotMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVolumeSnapshotMsgAvgFlowRate</name>
+        <description>apiCreateVolumeSnapshotMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVolumeSnapshotGroupMsgMaxFlowRate</name>
+        <description>apiCreateVolumeSnapshotGroupMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateVolumeSnapshotGroupMsgAvgFlowRate</name>
+        <description>apiCreateVolumeSnapshotGroupMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeFromVolumeSnapshotMsgMaxFlowRate</name>
+        <description>apiCreateDataVolumeFromVolumeSnapshotMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeFromVolumeSnapshotMsgAvgFlowRate</name>
+        <description>apiCreateDataVolumeFromVolumeSnapshotMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiAttachDataVolumeToVmMsgMaxFlowRate</name>
+        <description>apiAttachDataVolumeToVmMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiAttachDataVolumeToVmMsgAvgFlowRate</name>
+        <description>apiAttachDataVolumeToVmMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiDetachDataVolumeFromVmMsgMaxFlowRate</name>
+        <description>apiDetachDataVolumeFromVmMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiDetachDataVolumeFromVmMsgAvgFlowRate</name>
+        <description>apiDetachDataVolumeFromVmMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetDataVolumeAttachableVmMsgMaxFlowRate</name>
+        <description>apiGetDataVolumeAttachableVmMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetDataVolumeAttachableVmMsgAvgFlowRate</name>
+        <description>apiGetDataVolumeAttachableVmMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeFromVolumeTemplateMsgMaxFlowRate</name>
+        <description>apiCreateDataVolumeFromVolumeTemplateMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiCreateDataVolumeFromVolumeTemplateMsgAvgFlowRate</name>
+        <description>apiCreateDataVolumeFromVolumeTemplateMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetVolumeFormatMsgMaxFlowRate</name>
+        <description>apiGetVolumeFormatMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetVolumeFormatMsgAvgFlowRate</name>
+        <description>apiGetVolumeFormatMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiUpdateVolumeMsgMaxFlowRate</name>
+        <description>apiUpdateVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiUpdateVolumeMsgAvgFlowRate</name>
+        <description>apiUpdateVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiRecoverDataVolumeMsgMaxFlowRate</name>
+        <description>apiRecoverDataVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiRecoverDataVolumeMsgAvgFlowRate</name>
+        <description>apiRecoverDataVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiExpungeDataVolumeMsgMaxFlowRate</name>
+        <description>apiExpungeDataVolumeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiExpungeDataVolumeMsgAvgFlowRate</name>
+        <description>apiExpungeDataVolumeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiSyncVolumeSizeMsgMaxFlowRate</name>
+        <description>apiSyncVolumeSizeMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiSyncVolumeSizeMsgAvgFlowRate</name>
+        <description>apiSyncVolumeSizeMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetVolumeCapabilitiesMsgMaxFlowRate</name>
+        <description>apiGetVolumeCapabilitiesMsgMaxFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
+    <config>
+        <category>ratelimit</category>
+        <name>apiGetVolumeCapabilitiesMsgAvgFlowRate</name>
+        <description>apiGetVolumeCapabilitiesMsgAvgFlowRate</description>
+        <defaultValue>10</defaultValue>
+        <type>java.lang.Integer</type>
+    </config>
+
 </globalConfig>

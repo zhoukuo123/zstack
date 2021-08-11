@@ -1,7 +1,5 @@
-package org.zstack.compute.vm;
+package org.zstack.core.ratelimit;
 
-import org.zstack.core.ratelimit.RateLimitGlobalConfig;
-import org.zstack.core.ratelimit.TokenBucket;
 import org.zstack.header.Component;
 import org.zstack.header.apimediator.ApiMessageInterceptionException;
 import org.zstack.header.apimediator.ApiMessageInterceptor;
@@ -12,13 +10,14 @@ import org.zstack.utils.logging.CLogger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VmInstanceRateLimitInterceptor implements ApiMessageInterceptor, Component {
-    private static final CLogger logger = Utils.getLogger(VmInstanceRateLimitInterceptor.class);
+public class RateLimitInterceptor implements ApiMessageInterceptor, Component {
+    private static final CLogger logger = Utils.getLogger(RateLimitInterceptor.class);
 
     private Map<String, TokenBucket> tokenBucketMap = new HashMap<>();
 
     @Override
     public boolean start() {
+        // vmInstance api
         tokenBucketMap.put("APICreateVmInstanceMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateVmInstanceMsg").build());
         tokenBucketMap.put("APICreateVmInstanceFromVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_FROM_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_FROM_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateVmInstanceFromVolumeMsg").build());
         tokenBucketMap.put("APICreateVmInstanceFromVolumeSnapshotMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_FROM_VOLUME_SNAPSHOT_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_VM_INSTANCE_FROM_VOLUME_SNAPSHOT_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateVmInstanceFromVolumeSnapshotMsg").build());
@@ -90,6 +89,25 @@ public class VmInstanceRateLimitInterceptor implements ApiMessageInterceptor, Co
         tokenBucketMap.put("APIGetSpiceCertificatesMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_SPICE_CERTIFICATES_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_SPICE_CERTIFICATES_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetSpiceCertificatesMsg").build());
         tokenBucketMap.put("APIGetVmDeviceAddressMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_VM_DEVICE_ADDRESS_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_VM_DEVICE_ADDRESS_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetVmDeviceAddressMsg").build());
         tokenBucketMap.put("APIGetVmsCapabilitiesMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_VMS_CAPABILITIES_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_VMS_CAPABILITIES_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetVmsCapabilitiesMsg").build());
+        // volume api
+        tokenBucketMap.put("APICreateDataVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateDataVolumeMsg").build());
+        tokenBucketMap.put("APIDeleteDataVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_DELETE_DATA_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_DELETE_DATA_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APIDeleteDataVolumeMsg").build());
+        tokenBucketMap.put("APIQueryVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_QUERY_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_QUERY_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APIQueryVolumeMsg").build());
+        tokenBucketMap.put("APIChangeVolumeStateMsg", new TokenBucket(RateLimitGlobalConfig.API_CHANGE_VOLUME_STATE_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CHANGE_VOLUME_STATE_MSG_AVG_FLOW_RATE.value(Integer.class), "APIChangeVolumeStateMsg").build());
+        tokenBucketMap.put("APICreateVolumeSnapshotMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_VOLUME_SNAPSHOT_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_VOLUME_SNAPSHOT_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateVolumeSnapshotMsg").build());
+        tokenBucketMap.put("APICreateVolumeSnapshotGroupMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_VOLUME_SNAPSHOT_GROUP_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_VOLUME_SNAPSHOT_GROUP_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateVolumeSnapshotGroupMsg").build());
+        tokenBucketMap.put("APICreateDataVolumeFromVolumeSnapshotMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_FROM_VOLUME_SNAPSHOT_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_FROM_VOLUME_SNAPSHOT_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateDataVolumeFromVolumeSnapshotMsg").build());
+        tokenBucketMap.put("APIAttachDataVolumeToVmMsg", new TokenBucket(RateLimitGlobalConfig.API_ATTACH_DATA_VOLUME_TO_VM_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_ATTACH_DATA_VOLUME_TO_VM_MSG_AVG_FLOW_RATE.value(Integer.class), "APIAttachDataVolumeToVmMsg").build());
+        tokenBucketMap.put("APIDetachDataVolumeFromVmMsg", new TokenBucket(RateLimitGlobalConfig.API_DETACH_DATA_VOLUME_FROM_VM_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_DETACH_DATA_VOLUME_FROM_VM_MSG_AVG_FLOW_RATE.value(Integer.class), "APIDetachDataVolumeFromVmMsg").build());
+        tokenBucketMap.put("APIGetDataVolumeAttachableVmMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_DATA_VOLUME_ATTACHABLE_VM_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_DATA_VOLUME_ATTACHABLE_VM_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetDataVolumeAttachableVmMsg").build());
+        tokenBucketMap.put("APICreateDataVolumeFromVolumeTemplateMsg", new TokenBucket(RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_FROM_VOLUME_TEMPLATE_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_CREATE_DATA_VOLUME_FROM_VOLUME_TEMPLATE_MSG_AVG_FLOW_RATE.value(Integer.class), "APICreateDataVolumeFromVolumeTemplateMsg").build());
+        tokenBucketMap.put("APIGetVolumeFormatMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_VOLUME_FORMAT_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_VOLUME_FORMAT_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetVolumeFormatMsg").build());
+        tokenBucketMap.put("APIUpdateVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_UPDATE_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_UPDATE_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APIUpdateVolumeMsg").build());
+        tokenBucketMap.put("APIRecoverDataVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_RECOVER_DATA_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_RECOVER_DATA_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APIRecoverDataVolumeMsg").build());
+        tokenBucketMap.put("APIExpungeDataVolumeMsg", new TokenBucket(RateLimitGlobalConfig.API_EXPUNGE_DATA_VOLUME_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_EXPUNGE_DATA_VOLUME_MSG_AVG_FLOW_RATE.value(Integer.class), "APIExpungeDataVolumeMsg").build());
+        tokenBucketMap.put("APISyncVolumeSizeMsg", new TokenBucket(RateLimitGlobalConfig.API_SYNC_VOLUME_SIZE_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_SYNC_VOLUME_SIZE_MSG_AVG_FLOW_RATE.value(Integer.class), "APISyncVolumeSizeMsg").build());
+        tokenBucketMap.put("APIGetVolumeCapabilitiesMsg", new TokenBucket(RateLimitGlobalConfig.API_GET_VOLUME_CAPABILITIES_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_GET_VOLUME_CAPABILITIES_MSG_AVG_FLOW_RATE.value(Integer.class), "APIGetVolumeCapabilitiesMsg").build());
+
         return true;
     }
 
@@ -97,7 +115,7 @@ public class VmInstanceRateLimitInterceptor implements ApiMessageInterceptor, Co
     public APIMessage intercept(APIMessage msg) throws ApiMessageInterceptionException {
         TokenBucket tokenBucket = tokenBucketMap.get(msg.getClass().getSimpleName());
         if (tokenBucket == null) {
-            throw new RuntimeException("This api is not tokenBucket");
+            throw new RuntimeException("This API has no token bucket");
         }
 
         boolean result = tokenBucket.getTokens();
@@ -105,6 +123,8 @@ public class VmInstanceRateLimitInterceptor implements ApiMessageInterceptor, Co
         if (!result) {
             throw new RuntimeException("Your access is blocked");
         }
+
+        logger.debug(String.format("This API [api: %s] passed", msg.getClass().getSimpleName()));
 
         return msg;
     }

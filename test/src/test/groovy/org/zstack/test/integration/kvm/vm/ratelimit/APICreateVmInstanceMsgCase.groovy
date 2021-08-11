@@ -34,6 +34,9 @@ test a VM's start/stop/reboot/destroy/recover operations
     @Override
     void setup() {
         useSpring(KvmTest.springSpec)
+        spring {
+            include("ratelimit.xml")
+        }
     }
 
     @Override
@@ -118,7 +121,7 @@ test a VM's start/stop/reboot/destroy/recover operations
 
     @Override
     void clean() {
-//        env.delete()
+        env.delete()
     }
 
 }

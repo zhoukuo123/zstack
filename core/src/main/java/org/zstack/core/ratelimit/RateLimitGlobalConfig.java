@@ -8,6 +8,7 @@ import org.zstack.core.config.GlobalConfigValidation;
 public class RateLimitGlobalConfig {
     public static final String CATEGORY = "ratelimit";
 
+//    vmInstance api
     @GlobalConfigValidation(numberGreaterThan = 0)
     public static GlobalConfig API_CREATE_VM_INSTANCE_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateVmInstanceMsgMaxFlowRate");
 
@@ -433,4 +434,110 @@ public class RateLimitGlobalConfig {
 
     @GlobalConfigValidation(numberGreaterThan = 0)
     public static GlobalConfig API_GET_VMS_CAPABILITIES_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetVmsCapabilitiesMsgAvgFlowRate");
+
+//    volume api
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_DELETE_DATA_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiDeleteDataVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_DELETE_DATA_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiDeleteDataVolumeMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_QUERY_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiQueryVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_QUERY_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiQueryVolumeMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CHANGE_VOLUME_STATE_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiChangeVolumeStateMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CHANGE_VOLUME_STATE_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiChangeVolumeStateMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_VOLUME_SNAPSHOT_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateVolumeSnapshotMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_VOLUME_SNAPSHOT_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateVolumeSnapshotMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_VOLUME_SNAPSHOT_GROUP_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateVolumeSnapshotGroupMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_VOLUME_SNAPSHOT_GROUP_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateVolumeSnapshotGroupMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_FROM_VOLUME_SNAPSHOT_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeFromVolumeSnapshotMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_FROM_VOLUME_SNAPSHOT_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeFromVolumeSnapshotMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_ATTACH_DATA_VOLUME_TO_VM_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiAttachDataVolumeToVmMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_ATTACH_DATA_VOLUME_TO_VM_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiAttachDataVolumeToVmMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_DETACH_DATA_VOLUME_FROM_VM_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiDetachDataVolumeFromVmMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_DETACH_DATA_VOLUME_FROM_VM_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiDetachDataVolumeFromVmMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_DATA_VOLUME_ATTACHABLE_VM_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetDataVolumeAttachableVmMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_DATA_VOLUME_ATTACHABLE_VM_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetDataVolumeAttachableVmMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_FROM_VOLUME_TEMPLATE_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeFromVolumeTemplateMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_CREATE_DATA_VOLUME_FROM_VOLUME_TEMPLATE_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiCreateDataVolumeFromVolumeTemplateMsgAvgFlowRate");
+    
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_VOLUME_FORMAT_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetVolumeFormatMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_VOLUME_FORMAT_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetVolumeFormatMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_UPDATE_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiUpdateVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_UPDATE_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiUpdateVolumeMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_RECOVER_DATA_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiRecoverDataVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_RECOVER_DATA_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiRecoverDataVolumeMsgAvgFlowRate");
+    
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_EXPUNGE_DATA_VOLUME_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiExpungeDataVolumeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_EXPUNGE_DATA_VOLUME_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiExpungeDataVolumeMsgAvgFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_SYNC_VOLUME_SIZE_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiSyncVolumeSizeMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_SYNC_VOLUME_SIZE_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiSyncVolumeSizeMsgAvgFlowRate");
+    
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_VOLUME_CAPABILITIES_MSG_MAX_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetVolumeCapabilitiesMsgMaxFlowRate");
+
+    @GlobalConfigValidation(numberGreaterThan = 0)
+    public static GlobalConfig API_GET_VOLUME_CAPABILITIES_MSG_AVG_FLOW_RATE = new GlobalConfig(CATEGORY, "apiGetVolumeCapabilitiesMsgAvgFlowRate");
+
+//    volumeSnapshot api
+
 }
