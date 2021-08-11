@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     private static final CLogger logger = CLoggerImpl.getLogger(TokenBucketFacadeImpl.class);
 
-    private Map<Class, TokenBucket> tokenBucketMap = new ConcurrentHashMap<>();
+    private Map<String, TokenBucket> tokenBucketMap = new ConcurrentHashMap<>();
 
     private ReentrantLock lock = new ReentrantLock(true);
 
@@ -35,7 +35,7 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
 
     private void buildTokenBucket() {
         BeanUtils.reflections.getTypesAnnotatedWith(Action.class).forEach(clz-> {
-            TokenBucket tokenBucket = tokenBucketMap.put(clz, new TokenBucket(clz));
+            TokenBucket tokenBucket = tokenBucketMap.put(clz.getSimpleName(), new TokenBucket(clz.getSimpleName()));
             tokenBucketStart(tokenBucket);
         });
     }
@@ -64,8 +64,8 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     }
 
     @Override
-    public boolean getToken(Class clz) {
-        TokenBucket tokenBucket = tokenBucketMap.get(clz);
+    public boolean getToken(String apiName) {
+        TokenBucket tokenBucket = tokenBucketMap.get(apiName);
 
         if (tokenBucket == null) {
             return false;

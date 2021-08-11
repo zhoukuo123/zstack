@@ -111,7 +111,7 @@ public class RateLimitInterceptor implements ApiMessageInterceptor {
     @Override
     public APIMessage intercept(APIMessage msg) throws ApiMessageInterceptionException {
 
-        boolean result = tbf.getToken(msg.getClass());
+        boolean result = tbf.getToken(msg.getClass().getSimpleName());
 
         if (!result) {
             throw new RuntimeException("Your access is blocked");

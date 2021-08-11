@@ -10,8 +10,8 @@ public class TokenBucket {
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     
-    public TokenBucket(Class clz) {
-        apiName = clz.getSimpleName();
+    public TokenBucket(String apiName) {
+        this.apiName = apiName;
     }
 
     public TokenBucket(int maxFlowRate, int avgFlowRate, String apiName) {
