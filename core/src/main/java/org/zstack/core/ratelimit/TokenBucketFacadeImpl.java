@@ -9,8 +9,6 @@ import org.zstack.utils.BeanUtils;
 import org.zstack.utils.logging.CLogger;
 import org.zstack.utils.logging.CLoggerImpl;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,9 +17,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     private static final CLogger logger = CLoggerImpl.getLogger(TokenBucketFacadeImpl.class);
-
-    private Map<String, TokenBucket> tokenBucketMap = new ConcurrentHashMap<>();
-
     private ReentrantLock lock = new ReentrantLock(true);
 
     @Autowired
@@ -34,19 +29,17 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     }
 
     private void buildTokenBucket() {
-        BeanUtils.reflections.getTypesAnnotatedWith(Action.class).forEach(clz-> {
-            TokenBucket tokenBucket = tokenBucketMap.put(clz.getSimpleName(), new TokenBucket(clz.getSimpleName()));
+        BeanUtils.reflections.getTypesAnnotatedWith(Action.class).forEach(clz -> {
+            TokenBucket tokenBucket = new TokenBucket(clz.getSimpleName());
             tokenBucketStart(tokenBucket);
         });
     }
 
     private void tokenBucketStart(TokenBucket tokenBucket) {
-        if (tokenBucket.getMaxFlowRate() != 0) {
-            APIRateLimitVO apirl = new APIRateLimitVO();
-            apirl.setApi(tokenBucket.getApiName());
-            apirl.setToken(tokenBucket.getMaxFlowRate());
-            dbf.persist(apirl);
-        }
+        APIRateLimitVO apirl = new APIRateLimitVO();
+        apirl.setApi(tokenBucket.getApiName());
+        apirl.setToken(tokenBucket.getMaxFlowRate());
+        dbf.persist(apirl);
 
         TokenBucket.TokenProducer tokenProducer = tokenBucket.new TokenProducer(tokenBucket.getAvgFlowRate(), tokenBucket);
         tokenBucket.getScheduledExecutorService().scheduleAtFixedRate(tokenProducer, 0, 1, TimeUnit.SECONDS);
@@ -65,26 +58,15 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
 
     @Override
     public boolean getToken(String apiName) {
-        TokenBucket tokenBucket = tokenBucketMap.get(apiName);
+        Integer token = SQL.New("select token from APIRateLimitVO where api = :apiName", Integer.class).param("apiName", apiName).find();
 
-        if (tokenBucket == null) {
+        if (token == 0) {
             return false;
         }
 
-        lock.lock();
-        try {
-            Integer token = SQL.New("select token from APIRateLimitVO where api = :apiName", Integer.class).param("apiName", tokenBucket.getApiName()).find();
+        SQL.New("update APIRateLimitVO apirl set apirl.token = apirl.token - 1 where apirl.api = :apiName").param("apiName", apiName).execute();
 
-            if (token == 0) {
-                return false;
-            }
-
-            SQL.New("update APIRateLimitVO apirl set apirl.token = apirl.token - 1 where apirl.api = :apiName").param("apiName", tokenBucket.getApiName()).execute();
-
-            return true;
-        } finally {
-            lock.unlock();
-        }
+        return true;
     }
 
     @Override
