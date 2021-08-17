@@ -97,7 +97,7 @@ test a VM's start/stop/reboot/destroy/recover operations
     }
 
     void testStopVm() {
-        VmSpec spec = env.specByName("vm")
+
 
         KVMAgentCommands.StopVmCmd cmd = null
 
@@ -106,17 +106,12 @@ test a VM's start/stop/reboot/destroy/recover operations
             return rsp
         }
 
-        VmInstanceInventory inv = stopVmInstance {
-            uuid = spec.inventory.uuid
+        int threadSize = 30
+        ExecutorService executorService = Executors.newFixedThreadPool(threadSize)
+
+        for (int i = 0; i < threadSize; i++) {
+            executorService.execute(new TestPerformance(env))
         }
-
-        assert inv.state == VmInstanceState.Stopped.toString()
-
-        assert cmd != null
-        assert cmd.uuid == spec.inventory.uuid
-
-        def vmvo = dbFindByUuid(cmd.uuid, VmInstanceVO.class)
-        assert vmvo.state == VmInstanceState.Stopped
     }
 
     @Override

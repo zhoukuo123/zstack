@@ -5,6 +5,7 @@ import org.zstack.core.db.DatabaseFacade;
 import org.zstack.core.db.SQL;
 import org.zstack.header.Component;
 import org.zstack.header.identity.Action;
+import org.zstack.header.message.APISyncCallMessage;
 import org.zstack.utils.BeanUtils;
 import org.zstack.utils.logging.CLogger;
 import org.zstack.utils.logging.CLoggerImpl;
@@ -30,7 +31,19 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
 
     private void buildTokenBucket() {
         BeanUtils.reflections.getTypesAnnotatedWith(Action.class).forEach(clz -> {
-            TokenBucket tokenBucket = new TokenBucket(clz.getSimpleName());
+            Object obj = null;
+            try {
+                obj = clz.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            TokenBucket tokenBucket;
+            if (obj instanceof APISyncCallMessage) {
+                tokenBucket = new TokenBucket(RateLimitGlobalConfig.API_SYNC_CALL_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_SYNC_CALL_MSG_AVG_FLOW_RATE.value(Integer.class), clz.getSimpleName());
+            } else {
+                tokenBucket = new TokenBucket(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_MAX_FLOW_RATE.value(Integer.class), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_AVG_FLOW_RATE.value(Integer.class), clz.getSimpleName());
+            }
+
             tokenBucketStart(tokenBucket);
         });
     }
@@ -47,24 +60,19 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
 
     public static void addTokens(Integer tokenNum, TokenBucket tokenBucket) {
         for (int i = 0; i < tokenNum; i++) {
-            Integer token = SQL.New("select token from APIRateLimitVO where api = :apiName", Integer.class).param("apiName", tokenBucket.getApiName()).find();
-            if (token < tokenBucket.getMaxFlowRate()) {
-                SQL.New("update APIRateLimitVO apirl set apirl.token = apirl.token + 1 where apirl.api = :apiName").param("apiName", tokenBucket.getApiName()).execute();
-            } else {
-                break;
-            }
+            SQL.New("update APIRateLimitVO set token = token + 1 where api = :apiName and token < :maxFlowRate")
+                    .param("apiName", tokenBucket.getApiName())
+                    .param("maxFlowRate", tokenBucket.getMaxFlowRate()).execute();
         }
     }
 
     @Override
     public boolean getToken(String apiName) {
-        Integer token = SQL.New("select token from APIRateLimitVO where api = :apiName", Integer.class).param("apiName", apiName).find();
+        int result = SQL.New("update APIRateLimitVO set token = token - 1 where api = :apiName and token > 0").param("apiName", apiName).execute();
 
-        if (token == 0) {
+        if (result != 1) {
             return false;
         }
-
-        SQL.New("update APIRateLimitVO apirl set apirl.token = apirl.token - 1 where apirl.api = :apiName").param("apiName", apiName).execute();
 
         return true;
     }
