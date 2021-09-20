@@ -1,7 +1,10 @@
-CREATE TABLE `zstack`.`APIRateLimitVO`
+CREATE TABLE `zstack`.`TokenBucket`
 (
-    `id`    int primary key AUTO_INCREMENT,
-    `api`   varchar(100) NOT NULL,
-    `token` int          NOT NULL
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `id`      int primary key AUTO_INCREMENT,
+    `apiName` varchar(100) NOT NULL,
+    `total`   double       NOT NULL,
+    `rate`    double       NOT NULL,
+    `time`    long         NOT NULL,
+    `nowSize` double       NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;

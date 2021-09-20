@@ -1,34 +1,48 @@
 package org.zstack.core.ratelimit;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import javax.persistence.*;
 
+@Entity
+@Table
 public class TokenBucket {
+    @Id
+    @Column
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
     private String apiName;
-    private int maxFlowRate;
-    private int avgFlowRate;
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    @Column
+    private Double total;
 
-    public TokenBucket(int maxFlowRate, int avgFlowRate, String apiName) {
-        this.maxFlowRate = maxFlowRate;
-        this.avgFlowRate = avgFlowRate;
-        this.apiName = apiName;
+    @Column
+    private Double rate;
+
+    @Column
+    private Long time;
+
+    @Column
+    private Double nowSize;
+
+    public TokenBucket() {
+
     }
 
-    class TokenProducer implements Runnable {
-        private int avgFlowRate;
-        private TokenBucket tokenBucket;
+    public TokenBucket(String apiName, Double total, Double rate, Long time, Double nowSize) {
+        this.apiName = apiName;
+        this.total = total;
+        this.rate = rate;
+        this.time = time;
+        this.nowSize = nowSize;
+    }
 
-        public TokenProducer(int avgFlowRate, TokenBucket tokenBucket) {
-            this.avgFlowRate = avgFlowRate;
-            this.tokenBucket = tokenBucket;
-        }
+    public Integer getId() {
+        return id;
+    }
 
-        @Override
-        public void run() {
-            TokenBucketFacadeImpl.addTokens(avgFlowRate, tokenBucket);
-        }
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getApiName() {
@@ -39,27 +53,35 @@ public class TokenBucket {
         this.apiName = apiName;
     }
 
-    public int getMaxFlowRate() {
-        return maxFlowRate;
+    public Double getTotal() {
+        return total;
     }
 
-    public void setMaxFlowRate(int maxFlowRate) {
-        this.maxFlowRate = maxFlowRate;
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
-    public int getAvgFlowRate() {
-        return avgFlowRate;
+    public Double getRate() {
+        return rate;
     }
 
-    public void setAvgFlowRate(int avgFlowRate) {
-        this.avgFlowRate = avgFlowRate;
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 
-    public ScheduledExecutorService getScheduledExecutorService() {
-        return scheduledExecutorService;
+    public Long getTime() {
+        return time;
     }
 
-    public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService) {
-        this.scheduledExecutorService = scheduledExecutorService;
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public Double getNowSize() {
+        return nowSize;
+    }
+
+    public void setNowSize(Double nowSize) {
+        this.nowSize = nowSize;
     }
 }

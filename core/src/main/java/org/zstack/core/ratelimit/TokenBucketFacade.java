@@ -1,8 +1,10 @@
 package org.zstack.core.ratelimit;
 
+import org.zstack.header.message.APIMessage;
+
 /**
  * @author CoderZk
  */
 public interface TokenBucketFacade {
-    boolean getToken(String apiName);
+    boolean getToken(APIMessage msg);
 }

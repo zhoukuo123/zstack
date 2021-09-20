@@ -19,7 +19,7 @@
 
     <bean id="RateLimitInterceptor" class="org.zstack.core.ratelimit.RateLimitInterceptor">
         <zstack:plugin>
-            <zstack:extension interface="org.zstack.header.apimediator.ApiMessageInterceptor" />
+            <zstack:extension interface="org.zstack.header.apimediator.GlobalApiMessageInterceptor" />
         </zstack:plugin>
     </bean>
 
