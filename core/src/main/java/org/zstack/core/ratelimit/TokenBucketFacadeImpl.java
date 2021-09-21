@@ -1,6 +1,7 @@
 package org.zstack.core.ratelimit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.zstack.core.db.DatabaseFacade;
 import org.zstack.core.db.SQL;
 import org.zstack.header.Component;
@@ -38,7 +39,7 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
 
         int result = SQL.New("update TokenBucket tb set tb.nowSize = tb.nowSize - 1 where tb.apiName = :apiName and tb.nowSize >= 1").param("apiName", apiName).execute();
 
-        if (result != 1) {
+        if (result == 0) {
             return false;
         }
         return true;

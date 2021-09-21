@@ -101,7 +101,7 @@ test a VM's start/stop/reboot/destroy/recover operations
     }
 
     void testRebootVm() {
-        int threadSize = 30
+        int threadSize = 50
         CountDownLatch latch = new CountDownLatch(threadSize)
 
         for (int i = 0; i < threadSize; i++) {
