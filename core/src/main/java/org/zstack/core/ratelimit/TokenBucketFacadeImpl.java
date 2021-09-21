@@ -32,9 +32,9 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
         }
 
         long now = System.currentTimeMillis();
-        tokenBucket.setNowSize(Math.min(tokenBucket.getTotal(), tokenBucket.getNowSize() + (now - tokenBucket.getTime()) * tokenBucket.getRate()));
-        tokenBucket.setTime(now);
-        dbf.update(tokenBucket);
+
+        SQL.New("update TokenBucket tb set tb.nowSize = least(tb.total, tb.nowSize + (:now - tb.time) * tb.rate), tb.time = :time where tb.apiName = :apiName")
+                .param("now", now).param("time", now).param("apiName", apiName).execute();
 
         int result = SQL.New("update TokenBucket tb set tb.nowSize = tb.nowSize - 1 where tb.apiName = :apiName and tb.nowSize >= 1").param("apiName", apiName).execute();
 
