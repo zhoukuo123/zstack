@@ -36,7 +36,7 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
         tokenBucket.setTime(now);
         dbf.update(tokenBucket);
 
-        int result = SQL.New("update TokenBucket tb set tb.nowSize = tb.nowSize - 1 where tb.api = :apiName and tb.nowSize >= 1").param("apiName", apiName).execute();
+        int result = SQL.New("update TokenBucket tb set tb.nowSize = tb.nowSize - 1 where tb.apiName = :apiName and tb.nowSize >= 1").param("apiName", apiName).execute();
 
         if (result != 1) {
             return false;

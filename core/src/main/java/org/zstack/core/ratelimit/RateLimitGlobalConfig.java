@@ -8,15 +8,15 @@ import org.zstack.core.config.GlobalConfigDefinition;
 public class RateLimitGlobalConfig {
     public static final String CATEGORY = "ratelimit";
 
-    @GlobalConfigDef(type = Double.class, defaultValue = "50.0", description = "API sync call msg total")
+    @GlobalConfigDef(type = Double.class, defaultValue = "50.0", description = "API synchronous message call capacity")
     public static GlobalConfig API_SYNC_CALL_MSG_Total = new GlobalConfig(CATEGORY, "apiSyncCallMsgTotal");
 
-    @GlobalConfigDef(type = Double.class, defaultValue = "30.0", description = "API sync call msg rate")
+    @GlobalConfigDef(type = Double.class, defaultValue = "0.03", description = "The rate of API synchronous message calls, in milliseconds")
     public static GlobalConfig API_SYNC_CALL_MSG_Rate = new GlobalConfig(CATEGORY, "apiSyncCallMsgRate");
 
-    @GlobalConfigDef(type = Double.class, defaultValue = "30.0", description = "API async call msg total")
+    @GlobalConfigDef(type = Double.class, defaultValue = "30.0", description = "API asynchronous message call capacity")
     public static GlobalConfig API_ASYNC_CALL_MSG_Total = new GlobalConfig(CATEGORY, "apiAsyncCallMsgTotal");
 
-    @GlobalConfigDef(type = Double.class, defaultValue = "10.0", description = "API async call msg rate")
+    @GlobalConfigDef(type = Double.class, defaultValue = "0.01", description = "The rate of API asynchronous message calls, in milliseconds")
     public static GlobalConfig API_ASYNC_CALL_MSG_Rate = new GlobalConfig(CATEGORY, "apiAsyncCallMsgRate");
 }
