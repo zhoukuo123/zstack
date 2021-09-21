@@ -3,24 +3,36 @@ package org.zstack.test.integration.kvm.vm.ratelimit
 import org.springframework.http.HttpEntity
 import org.zstack.compute.vm.VmSystemTags
 import org.zstack.core.cloudbus.CloudBusGlobalConfig
+import org.zstack.core.db.Q
+import org.zstack.header.image.ImageConstant
+import org.zstack.header.vm.VmCreationStrategy
+import org.zstack.header.vm.VmInstanceEO
+import org.zstack.header.vm.VmInstanceEO_
 import org.zstack.header.vm.VmInstanceState
 import org.zstack.header.vm.VmInstanceVO
+import org.zstack.header.volume.VolumeEO
+import org.zstack.header.volume.VolumeVO_
 import org.zstack.kvm.KVMAgentCommands
 import org.zstack.kvm.KVMConstant
+import org.zstack.network.l3.NetworkGlobalProperty
+import org.zstack.sdk.*
 import org.zstack.test.integration.kvm.Env
 import org.zstack.test.integration.kvm.KvmTest
 import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.SubCase
 import org.zstack.testlib.VmSpec
 import org.zstack.utils.gson.JSONObjectUtil
+
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
-import org.zstack.sdk.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class APICreateVmInstanceMsgCase extends SubCase {
     EnvSpec env
 
     def DOC = """
-test a VM's start/stop/reboot/destroy/recover operations 
+test a VM's start/stop/reboot/destroy/recover operations
 """
 
     @Override
@@ -41,7 +53,7 @@ test a VM's start/stop/reboot/destroy/recover operations
     @Override
     void test() {
         env.create {
-            testStopVm()
+            testRebootVm()
 //            testStartVm()
         }
     }
@@ -88,27 +100,46 @@ test a VM's start/stop/reboot/destroy/recover operations
         }
     }
 
-    void testStopVm() {
-
-
-        KVMAgentCommands.StopVmCmd cmd = null
-
-        env.afterSimulator(KVMConstant.KVM_STOP_VM_PATH) { rsp, HttpEntity<String> e ->
-            cmd = JSONObjectUtil.toObject(e.body, KVMAgentCommands.StopVmCmd.class)
-            return rsp
-        }
+    void testRebootVm() {
+//        CountDownLatch latch = new CountDownLatch(2)
+//
+//        new Thread() {
+//            public void run() {
+//                VmSpec spec = env.specByName("vm")
+//
+//                VmInstanceInventory inv = rebootVmInstance {
+//                    uuid = spec.inventory.uuid
+//                }
+//                latch.countDown()
+//            }
+//        }.start()
+//
+//        new Thread() {
+//            public void run() {
+//                VmSpec spec = env.specByName("vm")
+//
+//                VmInstanceInventory inv = rebootVmInstance {
+//                    uuid = spec.inventory.uuid
+//                }
+//                latch.countDown()
+//            }
+//        }.start()
+//
+//        latch.await(5, TimeUnit.SECONDS)
 
         int threadSize = 30
         ExecutorService executorService = Executors.newFixedThreadPool(threadSize)
+        CountDownLatch latch = new CountDownLatch(30)
 
         for (int i = 0; i < threadSize; i++) {
-            executorService.execute(new TestPerformance(env))
+            executorService.execute(new TestPerformance(env, latch))
         }
+
+        latch.await(10, TimeUnit.SECONDS)
     }
 
     @Override
     void clean() {
         env.delete()
     }
-
 }
