@@ -101,41 +101,23 @@ test a VM's start/stop/reboot/destroy/recover operations
     }
 
     void testRebootVm() {
-//        CountDownLatch latch = new CountDownLatch(2)
-//
-//        new Thread() {
-//            public void run() {
-//                VmSpec spec = env.specByName("vm")
-//
-//                VmInstanceInventory inv = rebootVmInstance {
-//                    uuid = spec.inventory.uuid
-//                }
-//                latch.countDown()
-//            }
-//        }.start()
-//
-//        new Thread() {
-//            public void run() {
-//                VmSpec spec = env.specByName("vm")
-//
-//                VmInstanceInventory inv = rebootVmInstance {
-//                    uuid = spec.inventory.uuid
-//                }
-//                latch.countDown()
-//            }
-//        }.start()
-//
-//        latch.await(5, TimeUnit.SECONDS)
-
         int threadSize = 30
-        ExecutorService executorService = Executors.newFixedThreadPool(threadSize)
-        CountDownLatch latch = new CountDownLatch(30)
+        CountDownLatch latch = new CountDownLatch(threadSize)
 
         for (int i = 0; i < threadSize; i++) {
-            executorService.execute(new TestPerformance(env, latch))
+            new Thread() {
+                public void run() {
+                    VmSpec spec = env.specByName("vm")
+
+                    VmInstanceInventory inv = rebootVmInstance {
+                        uuid = spec.inventory.uuid
+                    }
+                    latch.countDown()
+                }
+            }.start()
         }
 
-        latch.await(10, TimeUnit.SECONDS)
+        latch.await(20, TimeUnit.SECONDS)
     }
 
     @Override
