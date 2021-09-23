@@ -35,6 +35,9 @@ test a VM's start/stop/reboot/destroy/recover operations
     @Override
     void setup() {
         useSpring(KvmTest.springSpec)
+        spring {
+            include("ratelimit.xml")
+        }
     }
 
     @Override

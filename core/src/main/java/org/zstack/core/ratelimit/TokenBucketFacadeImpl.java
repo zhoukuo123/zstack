@@ -1,7 +1,6 @@
 package org.zstack.core.ratelimit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.zstack.core.db.DatabaseFacade;
 import org.zstack.core.db.SQL;
 import org.zstack.header.Component;
@@ -10,39 +9,40 @@ import org.zstack.header.message.APISyncCallMessage;
 import org.zstack.utils.logging.CLogger;
 import org.zstack.utils.logging.CLoggerImpl;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author CoderZk
  */
 public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     private static final CLogger logger = CLoggerImpl.getLogger(TokenBucketFacadeImpl.class);
 
-    @Autowired
-    private DatabaseFacade dbf;
+    private Map<String, TokenBucketVO> tokenBucketMap = new ConcurrentHashMap<>();
 
     @Override
     public boolean getToken(APIMessage msg) {
         String apiName = msg.getClass().getSimpleName();
-        TokenBucket tokenBucket = SQL.New("select tb from TokenBucket tb where apiName = :apiName", TokenBucket.class).param("apiName", apiName).find();
-        if (tokenBucket == null) {
+        TokenBucketVO tokenBucketVO = tokenBucketMap.get(apiName);
+        if (tokenBucketVO == null) {
             if (msg instanceof APISyncCallMessage) {
-                tokenBucket = new TokenBucket(apiName, RateLimitGlobalConfig.API_SYNC_CALL_MSG_Total.value(Double.class), RateLimitGlobalConfig.API_SYNC_CALL_MSG_Rate.value(Double.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_SYNC_CALL_MSG_Total.value(Double.class));
+                tokenBucketVO = new TokenBucketVO(apiName, RateLimitGlobalConfig.API_SYNC_CALL_MSG_TOTAL.value(Integer.class), RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_SYNC_CALL_MSG_TOTAL.value(Integer.class) * 1.0);
             } else {
-                tokenBucket = new TokenBucket(apiName, RateLimitGlobalConfig.API_ASYNC_CALL_MSG_Total.value(Double.class), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_Rate.value(Double.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_Total.value(Double.class));
+                tokenBucketVO = new TokenBucketVO(apiName, RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class) * 1.0);
             }
-            dbf.persist(tokenBucket);
+            tokenBucketMap.put(apiName, tokenBucketVO);
         }
 
         long now = System.currentTimeMillis();
+        tokenBucketVO.setNowSize(Math.min(tokenBucketVO.getTotal(), tokenBucketVO.getNowSize() + (now - tokenBucketVO.getTime()) * tokenBucketVO.getRate() / 1000.0));
+        tokenBucketVO.setTime(now);
 
-        SQL.New("update TokenBucket tb set tb.nowSize = least(tb.total, tb.nowSize + (:now - tb.time) * tb.rate), tb.time = :time where tb.apiName = :apiName")
-                .param("now", now).param("time", now).param("apiName", apiName).execute();
-
-        int result = SQL.New("update TokenBucket tb set tb.nowSize = tb.nowSize - 1 where tb.apiName = :apiName and tb.nowSize >= 1").param("apiName", apiName).execute();
-
-        if (result == 0) {
+        if (tokenBucketVO.getNowSize() < 1) {
             return false;
+        } else {
+            tokenBucketVO.setNowSize(tokenBucketVO.getNowSize() - 1);
+            return true;
         }
-        return true;
     }
 
     @Override

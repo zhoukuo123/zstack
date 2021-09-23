@@ -19,11 +19,8 @@ public class RateLimitInterceptor implements GlobalApiMessageInterceptor {
     public APIMessage intercept(APIMessage msg) throws ApiMessageInterceptionException {
         boolean acquired = tbf.getToken(msg);
         if (!acquired) {
-            throw new RuntimeException("Your access is blocked");
+            throw new RuntimeException("Requests exceeded rate limit");
         }
-
-        logger.info(String.format("This API [api: %s] passed", msg.getClass().getSimpleName()));
-
         return msg;
     }
 

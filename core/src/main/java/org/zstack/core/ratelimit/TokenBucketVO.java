@@ -1,35 +1,15 @@
 package org.zstack.core.ratelimit;
 
-import javax.persistence.*;
 
-@Entity
-@Table
-public class TokenBucket {
-    @Id
-    @Column
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+public class TokenBucketVO {
     private Integer id;
-
-    @Column
     private String apiName;
-
-    @Column
-    private Double total;
-
-    @Column
-    private Double rate;
-
-    @Column
+    private Integer total;
+    private Integer rate;
     private Long time;
-
-    @Column
     private Double nowSize;
 
-    public TokenBucket() {
-
-    }
-
-    public TokenBucket(String apiName, Double total, Double rate, Long time, Double nowSize) {
+    public TokenBucketVO(String apiName, Integer total, Integer rate, Long time, Double nowSize) {
         this.apiName = apiName;
         this.total = total;
         this.rate = rate;
@@ -53,19 +33,19 @@ public class TokenBucket {
         this.apiName = apiName;
     }
 
-    public Double getTotal() {
+    public Integer getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public Double getRate() {
+    public Integer getRate() {
         return rate;
     }
 
-    public void setRate(Double rate) {
+    public void setRate(Integer rate) {
         this.rate = rate;
     }
 
