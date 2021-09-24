@@ -22,6 +22,6 @@ public class RateLimitGlobalConfig {
     public static GlobalConfig API_ASYNC_CALL_MSG_TOTAL = new GlobalConfig(CATEGORY, "apiAsyncCallMsgTokenBucketCapacity");
 
     @GlobalConfigValidation(numberGreaterThan = 0)
-    @GlobalConfigDef(type = Integer.class, defaultValue = "3", description = "The average number of requests per second allowed for creating, modifying, and deleting resource operations")
+    @GlobalConfigDef(type = Integer.class, defaultValue = "10", description = "The average number of requests per second allowed for creating, modifying, and deleting resource operations")
     public static GlobalConfig API_ASYNC_CALL_MSG_QPS = new GlobalConfig(CATEGORY, "apiAsyncCallMsgQPS");
 }
