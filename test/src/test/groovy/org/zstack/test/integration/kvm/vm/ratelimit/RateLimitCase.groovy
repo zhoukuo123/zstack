@@ -9,7 +9,7 @@ import org.zstack.sdk.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-class APIRebootVmMsgRateLimitCase extends SubCase {
+class RateLimitCase extends SubCase {
     EnvSpec env
 
     @Override
@@ -34,11 +34,11 @@ class APIRebootVmMsgRateLimitCase extends SubCase {
     void test() {
         env.create {
             int n = 10000
-            testRebootVMRateLimit(n)
+            testRebootVmRateLimit(n)
         }
     }
 
-    void testRebootVMRateLimit(int numberOfVM) {
+    void testRebootVmRateLimit(int numberOfVM) {
         VmInstanceInventory vm = env.inventoryByName("vm")
         def count = new AtomicInteger(0)
         def passedCount = new AtomicInteger(0)
@@ -65,7 +65,8 @@ class APIRebootVmMsgRateLimitCase extends SubCase {
             TimeUnit.SECONDS.sleep(1)
         }
 
-        logger.info(String.format("passed $passedCount API", passedCount))
-        logger.info(String.format("limited $limitedCount API", limitedCount))
+        assert passedCount.intValue() != numberOfVM
+        logger.info(String.format("Passed $passedCount APIs", passedCount))
+        logger.info(String.format("Limited to $limitedCount APIs", limitedCount))
     }
 }
