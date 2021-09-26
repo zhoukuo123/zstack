@@ -1,6 +1,6 @@
 package org.zstack.core.ratelimit;
 
-import org.zstack.core.db.GLock;
+
 import org.zstack.header.Component;
 import org.zstack.header.message.APIMessage;
 import org.zstack.header.message.APISyncCallMessage;
@@ -9,6 +9,7 @@ import org.zstack.utils.logging.CLoggerImpl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author CoderZk
@@ -17,6 +18,7 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     private static final CLogger logger = CLoggerImpl.getLogger(TokenBucketFacadeImpl.class);
 
     private Map<String, TokenBucketVO> tokenBucketMap = new ConcurrentHashMap<>();
+    private ReentrantLock lock = new ReentrantLock();
 
     @Override
     public boolean getToken(APIMessage msg) {
@@ -47,15 +49,20 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
             }
         }
 
-        long now = System.currentTimeMillis();
-        tokenBucketVO.setNowSize(Math.min(tokenBucketVO.getTotal(), tokenBucketVO.getNowSize() + (now - tokenBucketVO.getTime()) * tokenBucketVO.getRate() / 1000.0));
-        tokenBucketVO.setTime(now);
+        lock.lock();
+        try {
+            long now = System.currentTimeMillis();
+            tokenBucketVO.setNowSize(Math.min(tokenBucketVO.getTotal(), tokenBucketVO.getNowSize() + (now - tokenBucketVO.getTime()) * tokenBucketVO.getRate() / 1000.0));
+            tokenBucketVO.setTime(now);
 
-        if (tokenBucketVO.getNowSize() < 1) {
-            return false;
-        } else {
-            tokenBucketVO.setNowSize(tokenBucketVO.getNowSize() - 1);
-            return true;
+            if (tokenBucketVO.getNowSize() < 1) {
+                return false;
+            } else {
+                tokenBucketVO.setNowSize(tokenBucketVO.getNowSize() - 1);
+                return true;
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
