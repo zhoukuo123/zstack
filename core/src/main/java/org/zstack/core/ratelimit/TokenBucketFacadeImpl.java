@@ -1,6 +1,5 @@
 package org.zstack.core.ratelimit;
 
-
 import org.zstack.header.Component;
 import org.zstack.header.message.APIMessage;
 import org.zstack.header.message.APISyncCallMessage;

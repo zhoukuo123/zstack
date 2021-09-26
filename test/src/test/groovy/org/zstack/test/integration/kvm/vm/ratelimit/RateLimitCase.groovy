@@ -6,7 +6,6 @@ import org.zstack.testlib.EnvSpec
 import org.zstack.testlib.SubCase
 import org.zstack.sdk.*
 import org.zstack.core.ratelimit.RateLimitGlobalConfig
-import org.zstack.core.ratelimit.TokenBucketFacadeImpl
 import org.zstack.utils.Utils
 import org.zstack.utils.stopwatch.StopWatch
 
