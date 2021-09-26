@@ -1,8 +1,6 @@
 package org.zstack.core.ratelimit;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.zstack.core.db.DatabaseFacade;
-import org.zstack.core.db.SQL;
+import org.zstack.core.db.GLock;
 import org.zstack.header.Component;
 import org.zstack.header.message.APIMessage;
 import org.zstack.header.message.APISyncCallMessage;
@@ -31,6 +29,22 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
                 tokenBucketVO = new TokenBucketVO(apiName, RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class) * 1.0);
             }
             tokenBucketMap.put(apiName, tokenBucketVO);
+        }
+
+        if (msg instanceof APISyncCallMessage) {
+            if (!tokenBucketVO.getTotal().equals(RateLimitGlobalConfig.API_SYNC_CALL_MSG_TOTAL.value(Integer.class))) {
+                tokenBucketVO.setTotal(RateLimitGlobalConfig.API_SYNC_CALL_MSG_TOTAL.value(Integer.class));
+            }
+            if (!tokenBucketVO.getRate().equals(RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class))) {
+                tokenBucketVO.setRate(RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class));
+            }
+        } else {
+            if (!tokenBucketVO.getTotal().equals(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class))) {
+                tokenBucketVO.setTotal(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class));
+            }
+            if (!tokenBucketVO.getRate().equals(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class))) {
+                tokenBucketVO.setRate(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class));
+            }
         }
 
         long now = System.currentTimeMillis();
