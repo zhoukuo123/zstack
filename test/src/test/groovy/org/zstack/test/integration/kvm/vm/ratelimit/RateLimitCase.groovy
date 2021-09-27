@@ -73,10 +73,9 @@ class RateLimitCase extends SubCase {
 
         def useTime = sw.getLapse() / 1000.0
         def LAST_MSG_QPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
-        def MSG_TOTAL = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_TOTAL.value(Integer.class)
-        def TEST_MSG_QPS = (passedCount.intValue() - MSG_TOTAL) / useTime
+        def TEST_MSG_QPS = (passedCount.intValue() - LAST_MSG_QPS) / useTime
 
-        assert passedCount.intValue() != n
+        assert passedCount.intValue() < n && passedCount.intValue() > 0
         assert Math.abs(TEST_MSG_QPS - LAST_MSG_QPS) < 0.2
 
         logger.info(String.format("Passed $passedCount APIs", passedCount))
@@ -114,9 +113,9 @@ class RateLimitCase extends SubCase {
 
         def newUseTime = sw.getLapse() / 1000.0
         def NEW_MSG_QPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
-        def NEW_TEST_MSG_QPS = (passedCount.intValue() - MSG_TOTAL) / newUseTime
+        def NEW_TEST_MSG_QPS = (passedCount.intValue() - NEW_MSG_QPS) / newUseTime
 
-        assert passedCount.intValue() != n
+        assert passedCount.intValue() < n && passedCount.intValue() > 0
         assert Math.abs(NEW_TEST_MSG_QPS - NEW_MSG_QPS) < 0.2
 
         logger.info(String.format("Passed $passedCount APIs", passedCount))
