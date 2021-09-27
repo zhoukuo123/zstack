@@ -17,9 +17,12 @@ public class RateLimitInterceptor implements GlobalApiMessageInterceptor {
 
     @Override
     public APIMessage intercept(APIMessage msg) throws ApiMessageInterceptionException {
-        boolean acquired = tbf.getToken(msg);
-        if (!acquired) {
-            throw new RuntimeException("Requests exceeded rate limit");
+        Boolean isRateLimit = RateLimitGlobalConfig.RATE_LIMIT_SWITCH.value(Boolean.class);
+        if (isRateLimit) {
+            boolean acquired = tbf.getToken(msg);
+            if (!acquired) {
+                throw new RuntimeException("Requests exceeded rate limit");
+            }
         }
         return msg;
     }

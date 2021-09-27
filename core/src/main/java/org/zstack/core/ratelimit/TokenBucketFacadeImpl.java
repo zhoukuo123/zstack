@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static java.lang.Math.min;
+
 public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
     private static final CLogger logger = CLoggerImpl.getLogger(TokenBucketFacadeImpl.class);
 
@@ -22,9 +24,9 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
         TokenBucketVO tokenBucketVO = tokenBucketMap.get(apiName);
         if (tokenBucketVO == null) {
             if (msg instanceof APISyncCallMessage) {
-                tokenBucketVO = new TokenBucketVO(apiName, RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class) * 1.0);
+                tokenBucketVO = new TokenBucketVO(RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_SYNC_CALL_MSG_QPS.value(Integer.class) * 1.0);
             } else {
-                tokenBucketVO = new TokenBucketVO(apiName, RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class) * 1.0);
+                tokenBucketVO = new TokenBucketVO(RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class), System.currentTimeMillis(), RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class) * 1.0);
             }
             tokenBucketMap.put(apiName, tokenBucketVO);
         }
@@ -42,8 +44,7 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
         lock.lock();
         try {
             long now = System.currentTimeMillis();
-            tokenBucketVO.setNowSize(Math.min(tokenBucketVO.getRate(), tokenBucketVO.getNowSize() + (now - tokenBucketVO.getTime()) * tokenBucketVO.getRate() / 1000.0));
-            tokenBucketVO.setTime(now);
+            resync(now, tokenBucketVO);
 
             if (tokenBucketVO.getNowSize() < 1) {
                 return false;
@@ -54,6 +55,17 @@ public class TokenBucketFacadeImpl implements TokenBucketFacade, Component {
         } finally {
             lock.unlock();
         }
+    }
+
+    private void resync(long now, TokenBucketVO tokenBucketVO) {
+        double storedPermits = tokenBucketVO.getNowSize();
+        int maxBurstSeconds = 1;
+        int permitsPerSecond = tokenBucketVO.getRate();
+        int maxPermits = maxBurstSeconds * permitsPerSecond;
+        storedPermits = min(maxPermits,
+                storedPermits + (now - tokenBucketVO.getTime()) * permitsPerSecond / 1000.0);
+        tokenBucketVO.setTime(now);
+        tokenBucketVO.setNowSize(storedPermits);
     }
 
     @Override
