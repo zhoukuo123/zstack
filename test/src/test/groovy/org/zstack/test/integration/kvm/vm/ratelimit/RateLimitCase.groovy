@@ -72,7 +72,7 @@ class RateLimitCase extends SubCase {
             TimeUnit.SECONDS.sleep(1)
         }
 
-        def useTime = sw.getLapse() / 1000.0
+        double useTime = sw.getLapse() / 1000.0
         def testPassedCount = calculatePassedCount(useTime)
         def testApiMsgQPS = calculateQPS(passedCount, useTime)
         def apiMsgQPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
@@ -113,7 +113,7 @@ class RateLimitCase extends SubCase {
             TimeUnit.SECONDS.sleep(1)
         }
 
-        def newUseTime = sw.getLapse() / 1000.0
+        double newUseTime = sw.getLapse() / 1000.0
         def newTestPassedCount = calculatePassedCount(newUseTime)
         def newTestApiMsgQPS = calculateQPS(passedCount, newUseTime)
         def newApiMsgQPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
@@ -156,7 +156,7 @@ class RateLimitCase extends SubCase {
             TimeUnit.SECONDS.sleep(1)
         }
 
-        def useTime = sw.getLapse() / 1000.0
+        double useTime = sw.getLapse() / 1000.0
         def testPassedCount = calculatePassedCount(useTime)
         def testApiMsgQPS = calculateQPS(passedCount, useTime)
         def apiMsgQPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
@@ -202,7 +202,7 @@ class RateLimitCase extends SubCase {
     }
 
 
-    Object calculatePassedCount(Object useTime) {
+    Object calculatePassedCount(double useTime) {
         def apiMsgQPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
         def apiMsgCapacity = apiMsgQPS
         def testPassedCount = (apiMsgQPS * useTime < apiMsgCapacity)
@@ -211,7 +211,7 @@ class RateLimitCase extends SubCase {
         return testPassedCount
     }
 
-    Object calculateQPS(AtomicInteger passedCount, Object useTime) {
+    Object calculateQPS(AtomicInteger passedCount, double useTime) {
         def apiMsgQPS = RateLimitGlobalConfig.API_ASYNC_CALL_MSG_QPS.value(Integer.class)
         def apiMsgCapacity = apiMsgQPS
         def testMsgQPS
